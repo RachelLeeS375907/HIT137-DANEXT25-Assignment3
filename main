@@ -1,7 +1,1 @@
-echo "# HIT137-DANEXT25-Assignment3" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/RachelLeeS375907/HIT137-DANEXT25-Assignment3.git
-git push -u origin main
+
