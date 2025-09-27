@@ -1,1 +1,32 @@
-
+You are required to create a GitHub repository and add all your group mates to it (make sure to keep it public, not private). You should do this before you start the assignment.
+Note:
+All the contributions of team members should be recorded on GitHub from beginning to end (till you submit the assignment).
+Submission Guidelines:
+•
+Include your GitHub Repository link in a text file “github_link.txt”.
+•
+Zip all the programming files and outputs and “github_link.txt” and upload them to Learnline.
+Create a Tkinter GUI using the concepts of object-oriented programming, such as, multiple inheritance, multiple decorators, encapsulation, polymorphism, and method overriding.
+The GUI should include the following, but not limited to: (Example below)
+1.
+Integrate two free Hugging Face models from different categories (for example: text-to-image conversion, image classification, transcription/classification).
+2.
+Allow users to select input data (text, image, audio, or other formats) from a drop-down menu, run it through the selected AI models, and display the output.
+3.
+A section that displays your explanations (text) of where and why the OOP concepts mentioned above were used in your code. And other necessary explanations.
+4.
+A section that displays brief information about the AI model you selected.
+5.
+Necessary widgets (buttons, radio buttons, drop down list, etc) to navigate through the GUI.
+Notes:
+•
+You can find all the categories at https://huggingface.co/models (I have also included a reference image)
+•
+Install the required libraries to use the selected AI model (instructions.pdf)
+•
+Make sure the AI models are free-to-use, not larger in size.
+•
+You don’t need to download the AI model to use it.
+You can easily/directly import the AI models using libraries (research about it) and integrate to the GUI.
+•
+The entire code should not be placed in a single file. Instead, it should be organized into multiple program files, each handling specific parts of the application. A main program file should then be used to bring everything together and run the application.
