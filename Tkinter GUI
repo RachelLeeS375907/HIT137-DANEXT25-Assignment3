@@ -1,2 +1,26 @@
 import tkinter as tk
-import cv2
+
+root = tk.Tk()
+root.title("Tkinter AI GUI")
+root.geometry("400x500")
+
+frame1 = tk.Frame(root)
+frame1.pack()
+frame2 = tk.Frame(root)
+frame2.pack(side="right")
+
+label1 = tk.Label(frame1, text="Model Selection:")
+label2 = tk.Label(frame2, text="Frame 2")
+label1.grid(row=0, column=0)
+label2.pack()
+
+dropdown1 = tk.StringVar(frame1)
+dropdown1.set("First Model")
+options = ["First Model", "Second Model"]
+dropdownmenu = tk.OptionMenu(frame1, dropdown1, *options)
+dropdownmenu.grid(row=0, column=1)
+
+confbutton = tk.Button(frame1, text="Launch Model")
+confbutton.grid(row=0, column=2)
+
+root.mainloop()
