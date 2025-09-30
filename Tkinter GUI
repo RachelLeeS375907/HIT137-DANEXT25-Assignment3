@@ -11,7 +11,7 @@ frame2 = tk.Frame(root)
 frame3 = tk.Frame(root)
 frame4 = tk.Frame(root)
 #Set location for frames
-frame1.pack(pady=10)
+frame1.pack(padx=20, pady=20)
 frame2.pack(side="left")
 frame3.pack(side="right")
 frame4.pack(side="bottom")
@@ -28,8 +28,8 @@ confbutton = tk.Button(frame1, text="Launch Model")
 confbutton.grid(row=0, column=2)
 
 #Create User Input frame
-label2 = tk.Label(frame2, text="User Input")
-label2.grid(row=0, column=0, sticky="nw")
+label2 = tk.Label(frame2, text="User Input", padx=10, pady=10)
+label2.pack(side="left", padx=10, pady=10)
 
 
 root.mainloop()
