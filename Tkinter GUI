@@ -16,33 +16,47 @@ frame2.pack(side="left")
 frame3.pack(side="right")
 frame4.pack(side="bottom")
 
-#Create label, dropdown menu and launch button for model selection in top frame
+#Model selection
+#Create label
 label1 = tk.Label(frame1, text="Model Selection:")
 label1.grid(row=0, column=0)
+#Create dropdown menu
 dropdown1 = tk.StringVar(frame1)
 dropdown1.set("First Model")
 options = ["First Model", "Second Model"]
 dropdownmenu = tk.OptionMenu(frame1, dropdown1, *options)
 dropdownmenu.grid(row=0, column=1)
+#Create confirmation button
 confbutton = tk.Button(frame1, text="Launch Model")
 confbutton.grid(row=0, column=2)
 
 #Create "User Input" frame
+#Create label
 label2 = tk.Label(frame2, text="User Input")
 label2.grid(row=0, column=0)
+#Create text and image check buttons
 chkbutton1 = tk.Checkbutton(frame2, text="Text")
 chkbutton1.grid(row=1, column=0)
 chkbutton2 = tk.Checkbutton(frame2, text="Image")
 chkbutton2.grid(row=1, column=1)
+#Create add file button
 addbutton = tk.Button(frame2, text="Add File")
 addbutton.grid(row=1, column=2)
+#Create input box
 inputbox = tk.Text(frame2, height=5, width=20)
 inputbox.grid(row=2, column=0, columnspan=5, pady=10)
+#Create buttons to run model 1 or 2
+run1button = tk.Button(frame2, text="Run Model 1")
+run2button = tk.Button(frame2, text="Run Model 2")
+run1button.grid(row=3, column=0)
+run2button.grid(row=3, column=1)
 
 #Create "Output" frame
+#Create label
 label3 = tk.Label(frame3, text="Output")
 label3.grid(row=0, column=0)
-outputbox = tk.Text(frame3, height=8, width=20)
+#Create output box
+outputbox = tk.Text(frame3, height=9, width=20)
 outputbox.grid(row=1, column=0)
 
 root.mainloop()
