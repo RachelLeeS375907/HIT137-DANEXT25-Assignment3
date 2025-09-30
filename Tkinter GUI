@@ -27,16 +27,14 @@ dropdownmenu.grid(row=0, column=1)
 confbutton = tk.Button(frame1, text="Launch Model")
 confbutton.grid(row=0, column=2)
 
-#Create User Input frame
+#Create "User Input" frame
 label2 = tk.Label(frame2, text="User Input")
 label2.grid(row=0, column=0)
 chkbutton1 = tk.Checkbutton(frame2, text="Text")
 chkbutton1.grid(row=1, column=0)
 chkbutton2 = tk.Checkbutton(frame2, text="Image")
 chkbutton2.grid(row=1, column=1)
-
-
-
+inputbox = tk.Text
 
 
 
