@@ -1,62 +1,135 @@
+# mac/tk tweaks & HF cache
+import os
+os.environ.setdefault("TK_SILENCE_DEPRECATION", "1")
+os.environ.setdefault("HF_HOME", os.path.join(os.path.expanduser("~"), ".cache", "huggingface"))
+
 import tkinter as tk
+from tkinter import messagebox
 
-#Create window, define name and set size
+# Optional (image preview later)
+try:
+    from PIL import Image, ImageTk  # pip install pillow
+    PIL_OK = True
+except Exception:
+    PIL_OK = False
+
+# Hugging Face pipeline (sentiment)
+sentiment_pipe = None
+try:
+    from transformers import pipeline  # pip install transformers "torch>=2.3,<2.5"
+    sentiment_pipe = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+except Exception as e:
+    print("Transformers not ready (GUI still opens):", e)
+
+# ---------------- GUI ----------------
 root = tk.Tk()
-root.title("Tkinter AI GUI")
-root.geometry("400x500")
+root.title("Tkinter AI GUI — Diagnostic Layout")
+root.geometry("800x520")  # bigger to avoid crowding
+root.minsize(640, 480)
 
-#Create frames in main window
-frame1 = tk.Frame(root)
-frame2 = tk.Frame(root)
-frame3 = tk.Frame(root)
-frame4 = tk.Frame(root)
-#Set location for frames
-frame1.pack(padx=10, pady=10)
-frame2.pack(side="left")
-frame3.pack(side="right")
-frame4.pack(side="bottom")
+# Top control bar (uses GRID for internal widgets)
+frame1 = tk.Frame(root, bg="#eef7ff", bd=1, relief="solid")
+frame1.pack(side="top", fill="x", padx=10, pady=10)
 
-#Model selection
-#Create label
-label1 = tk.Label(frame1, text="Model Selection:")
-label1.grid(row=0, column=0)
-#Create dropdown menu
-dropdown1 = tk.StringVar(frame1)
-dropdown1.set("First Model")
-options = ["First Model", "Second Model"]
+# Main area split: left output + right info (uses PACK inside this container)
+main = tk.Frame(root, bg="#f8f8f8")
+main.pack(side="top", fill="both", expand=True, padx=10, pady=(0,10))
+
+left = tk.Frame(main, bg="#fff7ee", bd=1, relief="solid")
+left.pack(side="left", fill="both", expand=True, padx=(0,10))
+
+frame2 = tk.Frame(main, bg="#f3fff0", width=240, bd=1, relief="solid")
+frame2.pack(side="right", fill="both")
+
+# ---------- TOP CONTROLS (frame1 uses grid) ----------
+# Make columns 1 and 2 expandable
+frame1.grid_columnconfigure(1, weight=1)  # dropdown/text column
+frame1.grid_columnconfigure(2, weight=1)  # launch button column can stay 0 if you like
+
+label1 = tk.Label(frame1, text="Model Selection:", bg="#eef7ff")
+label1.grid(row=0, column=0, sticky="w", padx=(8,6), pady=(8,4))
+
+dropdown1 = tk.StringVar(frame1, value="Text Sentiment")
+options = ["Text Sentiment", "Image Classification (next)"]
 dropdownmenu = tk.OptionMenu(frame1, dropdown1, *options)
-dropdownmenu.grid(row=0, column=1)
-#Create confirmation button
-confbutton = tk.Button(frame1, text="Launch Model")
-confbutton.grid(row=0, column=2)
+dropdownmenu.grid(row=0, column=1, sticky="w", padx=6, pady=(8,4))
 
-#Create "User Input" frame
-#Create label
-label2 = tk.Label(frame2, text="User Input")
-label2.grid(row=0, column=0)
-#Create text and image check buttons
-chkbutton1 = tk.Checkbutton(frame2, text="Text")
-chkbutton1.grid(row=1, column=0)
-chkbutton2 = tk.Checkbutton(frame2, text="Image")
-chkbutton2.grid(row=1, column=1)
-#Create add file button
-addbutton = tk.Button(frame2, text="Add File")
-addbutton.grid(row=1, column=2)
-#Create input box
-inputbox = tk.Text(frame2, height=5, width=20)
-inputbox.grid(row=2, column=0, columnspan=5, pady=10)
-#Create buttons to run model 1 or 2
-run1button = tk.Button(frame2, text="Run Model 1")
-run2button = tk.Button(frame2, text="Run Model 2")
-run1button.grid(row=3, column=0)
-run2button.grid(row=3, column=1)
+def write_output(msg: str):
+    output_box.config(state="normal")
+    output_box.delete("1.0", "end")
+    output_box.insert("1.0", msg)
+    output_box.config(state="disabled")
 
-#Create "Output" frame
-#Create label
-label3 = tk.Label(frame3, text="Output")
-label3.grid(row=0, column=0)
-#Create output box
-outputbox = tk.Text(frame3, height=9, width=20)
-outputbox.grid(row=1, column=0)
+def launch_model():
+    selected = dropdown1.get()
+    if selected == "Text Sentiment":
+        txt = (text_entry.get() or "").strip()
+        if not txt:
+            messagebox.showwarning("Missing input", "Please type some text in the box next to 'Text:'")
+            write_output("⚠️ Please type something in the text box under Model Selection.")
+            text_entry.focus_set()
+            return
+        if sentiment_pipe is None:
+            messagebox.showerror(
+                "Model not ready",
+                "Transformers/Torch not installed or failed to load.\n\nTry:\n  source .venv/bin/activate\n  pip install pillow transformers \"torch>=2.3,<2.5\""
+            )
+            return
+        try:
+            write_output("Running sentiment analysis… (first run may download the model)")
+            res = sentiment_pipe(txt)[0]
+            label = res.get("label", "?")
+            score = float(res.get("score", 0.0))
+            write_output(f"✅ {label} ({score:.2f})")
+        except Exception as e:
+            messagebox.showerror("Error running model", str(e))
+            write_output(f"❌ Error: {e}")
+    else:
+        messagebox.showinfo("Not yet", "Image classification will be added next.")
+        write_output("ℹ️ Image classification coming next milestone.")
+
+confbutton = tk.Button(frame1, text="Launch Model", command=launch_model)
+confbutton.grid(row=0, column=2, sticky="e", padx=(6,8), pady=(8,4))
+
+# TEXT INPUT ROW — make it big & impossible to miss
+label_text = tk.Label(frame1, text="Text:", bg="#eef7ff")
+label_text.grid(row=1, column=0, sticky="w", padx=(8,6), pady=(6,10))
+
+text_entry = tk.Entry(frame1)
+text_entry.grid(row=1, column=1, columnspan=2, sticky="we", padx=(6,8), pady=(6,10))
+text_entry.configure(width=60)  # visual width hint
+text_entry.focus_set()
+
+# ---------- LEFT OUTPUT ----------
+tk.Label(left, text="Output:", bg="#fff7ee").pack(anchor="w", padx=8, pady=(8,0))
+output_box = tk.Text(left, height=12, state="disabled")
+output_box.pack(fill="both", expand=True, padx=8, pady=8)
+
+# ---------- RIGHT INFO ----------
+label2 = tk.Label(frame2, text="Model Info (coming soon)", bg="#f3fff0")
+label2.pack(anchor="w", padx=8, pady=8)
+
+# QoL: Enter key launches
+root.bind("<Return>", lambda e: launch_model())
+
+# ---- DIAGNOSTIC: print widget geometry after layout ----
+root.update_idletasks()
+print("\n[Geometry diagnostics]")
+for wdg, name in [
+    (frame1, "frame1(top controls)"),
+    (dropdownmenu, "dropdownmenu"),
+    (label_text, "label_text"),
+    (text_entry, "text_entry"),
+    (left, "left(panel)"),
+    (frame2, "frame2(right panel)"),
+]:
+    try:
+        x = wdg.winfo_rootx()
+        y = wdg.winfo_rooty()
+        w = wdg.winfo_width()
+        h = wdg.winfo_height()
+        print(f"{name}: pos=({x},{y}) size=({w}x{h})")
+    except Exception as e:
+        print(f"{name}: geometry query failed: {e}")
 
 root.mainloop()
