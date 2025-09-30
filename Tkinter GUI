@@ -34,8 +34,13 @@ chkbutton1 = tk.Checkbutton(frame2, text="Text")
 chkbutton1.grid(row=1, column=0)
 chkbutton2 = tk.Checkbutton(frame2, text="Image")
 chkbutton2.grid(row=1, column=1)
-inputbox = tk.Text
+addbutton = tk.Button(frame2, text="Add File")
+addbutton.grid(row=1, column=2)
+inputbox = tk.Text(frame2, height=5, width=20)
+inputbox.grid(row=2, column=0, columnspan=5, pady=10)
 
+#Create "Output" frame
 
 
 root.mainloop()
+
