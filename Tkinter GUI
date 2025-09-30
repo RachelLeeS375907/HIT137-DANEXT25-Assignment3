@@ -40,7 +40,9 @@ inputbox = tk.Text(frame2, height=5, width=20)
 inputbox.grid(row=2, column=0, columnspan=5, pady=10)
 
 #Create "Output" frame
-
+label3 = tk.Label(frame3, text="Output")
+label3.grid(row=0, column=0)
+outputbox = tk.Text(frame3, height=8, width=20)
+outputbox.grid(row=1, column=0)
 
 root.mainloop()
-
