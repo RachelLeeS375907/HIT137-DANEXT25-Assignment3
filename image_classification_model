@@ -1,7 +1,3 @@
-"""
-image_classification_model.py - Image Classification Model Implementation
-Demonstrates: Inheritance, Multiple Inheritance, Polymorphism, Method Overriding
-"""
 from base_models import AIModel, LoggerMixin, timing_decorator, error_handler
 from transformers import pipeline
 from PIL import Image
