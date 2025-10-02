@@ -8,7 +8,7 @@ from image_classification_model import ImageClassificationModel
 class AIModelGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("AI Models Integration - Hugging Face")
+        self.root.title("HIT137 Assignment 3 - Group DAN/EXT25")
         self.root.geometry("1200x800")
         self.root.configure(bg="#f0f0f0")
         
