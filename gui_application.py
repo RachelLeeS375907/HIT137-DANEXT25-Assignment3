@@ -59,7 +59,7 @@ class AIModelGUI:
         #Setup model selection section
         frame = tk.LabelFrame(
             parent,
-            text="Select AI Model",
+            text="Select Model",
             font=("Arial", 12, "bold"),
             bg="white",
             fg="#2c3e50"
