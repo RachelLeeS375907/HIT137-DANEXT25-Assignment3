@@ -22,5 +22,7 @@ venv\Scripts\activate
 5. Enter into terminal (run program): python main.py
 
 Note, to exit virtual environment(doing other things etc), type: deactivate
-   
+
+Recommended Python 3.13.7
+Recommended Pillow (PIL) 11.3.0
    
