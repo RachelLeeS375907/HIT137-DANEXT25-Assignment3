@@ -8,7 +8,7 @@ from image_classification_model import ImageClassificationModel
 class AIModelGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("HIT137 Assignment 3 - Group DAN/EXT25")
+        self.root.title("AI Models Integration - Hugging Face")
         self.root.geometry("1200x800")
         self.root.configure(bg="#f0f0f0")
         
@@ -59,7 +59,7 @@ class AIModelGUI:
         #Setup model selection section
         frame = tk.LabelFrame(
             parent,
-            text="Select Model",
+            text="Select AI Model",
             font=("Arial", 12, "bold"),
             bg="white",
             fg="#2c3e50"
@@ -234,54 +234,59 @@ class AIModelGUI:
         oop_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         #Text area for OOP Content
-        oop_content = """
-        OBJECT-ORIENTED PROGRAMMING CONCEPTS USED:
-1. MULTIPLE INHERITANCE:
-   - SentimentAnalysisModel and ImageClassificationModel both inherit from:
-     * AIModel (abstract base class)
-     * LoggerMixin (mixin class for logging)
-   - Location: sentiment_model.py and image_classification_model.py
-   - Why: To combine abstract model behavior with logging functionality
+        oop_content = ("""
+            OBJECT-ORIENTED PROGRAMMING CONCEPTS USED
 
-2. ENCAPSULATION:
-   - Private attributes: __model_name, __description, __pipeline
-   - Protected attributes: _is_loaded
-   - Property decorators for controlled access
-   - Location: base_models.py (AIModel class)
-   - Why: To hide internal implementation and provide controlled access
+            1. MULTIPLE INHERITANCE
+            - The Sentiment and Image models inherit from two classes:
+              • AIModel → provides the main structure
+              • LoggerMixin → adds logging ability
+            - Location: sentiment_model.py, image_classification_model.py
+            - Why: Follow AIModel rules and record logs without repeating code
 
-3. ABSTRACTION:
-   - AIModel is an abstract base class (ABC)
-   - Abstract methods: load_model(), process(), get_model_info()
-   - Location: base_models.py
-   - Why: To define a contract that all model classes must follow
+            2. ENCAPSULATION
+            - Private attributes: __model_name, __description, __pipeline (not accessed directly)
+            - Protected attribute: _is_loaded (“use with care”)
+            - Properties control how values can be read or changed
+            - Location: base_models.py (AIModel class)
+            - Why: Hide internal details and give safe, controlled access
 
-4. POLYMORPHISM:
-   - Each model implements process() differently:
-     * Sentiment model processes text
-     * Image model processes images
-   - Location: Both model files
-   - Why: Same interface, different behavior based on object type
+            3. ABSTRACTION
+            - AIModel is an abstract base class (ABC)
+            - Defines abstract methods: load_model(), process(), get_model_info()
+            - Location: base_models.py
+            - Why: Clear contract — every model must implement these methods
 
-5. METHOD OVERRIDING:
-   - Child classes override abstract methods from AIModel
-   - load_model(), process(), get_model_info() are overridden
-   - Location: sentiment_model.py and image_classification_model.py
-   - Why: To provide specific implementation for each model type
+            4. POLYMORPHISM
+            - Same method name: process()
+            - Behavior differs:
+              • Sentiment model → processes text
+              • Image model → processes images
+            - Location: both model files
+            - Why: One common interface, different behavior
 
-6. MULTIPLE DECORATORS:
-   - @timing_decorator: Measures execution time
-   - @error_handler: Handles exceptions gracefully
-   - Applied to load_model() and process() methods
-   - Location: base_models.py (defined), applied in model classes
-   - Why: To add cross-cutting concerns without modifying core logic
+            5. METHOD OVERRIDING
+            - Child classes override AIModel methods
+            - They implement their own:
+              • load_model()
+              • process()
+              • get_model_info()
+            - Location: sentiment_model.py, image_classification_model.py
+            - Why: Each model has its own specific implementation
 
-7. COMPOSITION:
-   - AIModelGUI contains instances of model classes
-   - Models are stored in __models dictionary
-   - Location: gui_application.py
-   - Why: "Has-a" relationship - GUI has models, doesn't inherit from them
-        """
+            6. MULTIPLE DECORATORS
+            - @timing_decorator → measures execution time
+            - @error_handler → catches errors and prevents crashes
+            - Applied to: load_model(), process()
+            - Location: defined in base_models.py, applied in model classes
+            - Why: Add features (timing, error handling) without changing core logic
+
+            7. COMPOSITION
+            - The GUI does not inherit from the models — it contains them
+            - Models are stored in a dictionary (__models)
+            - Location: gui_application.py
+            - Why: The GUI “has models” instead of “is a model,” keeping roles separate
+        """).strip()
         
         oop_text.insert(1.0, oop_content)
         oop_text.config(state=tk.DISABLED)
